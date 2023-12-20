@@ -6,6 +6,9 @@ import static org.mockito.Mockito.*;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Vector;
+import java.lang.reflect.Field;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,5 +45,15 @@ public class ProductDeliveryTest {
         }
     }
 
+	@Test
+	public void testCalculateHandlingAmount_NoOrders() throws NoSuchFieldException, IllegalAccessException {
+		Field field = ProductDelivery.class.getDeclaredField("orders");
+		field.setAccessible(true);
+		field.set(productDelivery, new Vector<>());
+
+		assertThrows(MissingOrdersException.class, () -> {
+			productDelivery.calculateHandlingAmount();
+		});
+	}
 
 }
