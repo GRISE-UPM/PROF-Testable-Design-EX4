@@ -15,8 +15,9 @@ public class ProductDeliveryTest {
 	}
 	
 	@Test
-	public void test() throws MissingOrdersException  {
-		assertEquals(20, productDelivery.calculateHandlingAmount());
+	public void testNoDataBase() throws Exception  {
+		assertThrowsExactly(DatabaseProblemException.class, () ->
+			{new ProductDelivery("wrong_db");});
 	}
 
 }

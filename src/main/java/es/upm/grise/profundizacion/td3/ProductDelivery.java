@@ -9,16 +9,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ProductDelivery {
-	
+
 	private Vector<Order> orders = new Vector<Order>();
 	
-	public ProductDelivery() throws DatabaseProblemException {
+	protected ProductDelivery(String db) throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = DriverManager.getConnection(db);
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -43,6 +43,10 @@ public class ProductDelivery {
 			
 		}
 
+	}
+
+	public ProductDelivery() throws DatabaseProblemException {
+		this("jdbc:sqlite:resources/orders.db");
 	}
 
 	// Calculate the handling amount
