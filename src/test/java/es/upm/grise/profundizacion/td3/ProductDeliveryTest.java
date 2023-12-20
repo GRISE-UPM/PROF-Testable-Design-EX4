@@ -2,8 +2,6 @@ package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.Vector;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +29,14 @@ public class ProductDeliveryTest {
 			this.variables.set("database.location", null);
 			new ProductDelivery();
 		}, "Expected throw when no database.location env var found");
+	}
+
+	@Test
+	public void testMoreThan10Orders() throws MissingOrdersException {
+		for (int i = 0; i < 10; i++) {
+			this.productDelivery.orders.add(new Order(i, 10));
+		}
+		assertEquals(33, productDelivery.calculateHandlingAmount());
 	}
 
 	@Test
