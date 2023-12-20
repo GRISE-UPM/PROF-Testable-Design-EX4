@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 
 public class ProductDelivery {
 
-	private Vector<Order> orders = new Vector<Order>();
+	protected Vector<Order> orders = new Vector<Order>();
 
 	public ProductDelivery(CustomDriverManager driver) throws DatabaseProblemException {
 		// Orders are loaded into the orders vector for processing
@@ -77,5 +77,13 @@ public class ProductDelivery {
 		return totalAmount * handlingPercentage; // NODO 9
 
 	} // NODO SALIDA
+
+	public Vector<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(Vector<Order> orders) {
+		this.orders = orders;
+	}
 
 }
