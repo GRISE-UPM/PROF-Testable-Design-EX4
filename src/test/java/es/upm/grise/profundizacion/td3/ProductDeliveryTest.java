@@ -34,4 +34,11 @@ public class ProductDeliveryTest {
 			productDelivery.calculateHandlingAmount();
 		});
 	}
+
+	@Test
+	public void testIsLate() throws MissingOrdersException  {
+		SimpleDateFormat sdf = mock(SimpleDateFormat.class);
+		when(sdf.format(any())).thenReturn("23");
+		assertEquals(20, productDelivery.calculateHandlingAmount());
+	}
 }
