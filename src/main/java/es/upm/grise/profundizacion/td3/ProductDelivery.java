@@ -10,7 +10,7 @@ import java.sql.ResultSet;
 
 public class ProductDelivery {
 	
-	private Vector<Order> orders = new Vector<Order>();
+	protected Vector<Order> orders = new Vector<Order>();
 
 	public ConnectionDB connectionDB;
 	
