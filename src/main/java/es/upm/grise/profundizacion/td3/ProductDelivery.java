@@ -9,16 +9,16 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ProductDelivery {
+
+	protected Vector<Order> orders = new Vector<Order>();
 	
-	private Vector<Order> orders = new Vector<Order>();
-	
-	public ProductDelivery() throws DatabaseProblemException {
+	protected ProductDelivery(String db) throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = DriverManager.getConnection(db);
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -45,25 +45,28 @@ public class ProductDelivery {
 
 	}
 
+	public ProductDelivery() throws DatabaseProblemException {
+		this("jdbc:sqlite:resources/orders.db");
+	}
+
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException {
+	protected double calculateHandlingAmount(SimpleDateFormat sdf) throws MissingOrdersException {
 		
 		// This method can only be invoked when there are orders to process
-		if(orders.isEmpty())
-			throw new MissingOrdersException();
+		if(orders.isEmpty()) //Nodo 1
+			throw new MissingOrdersException(); //Nodo 2
 		
 		// The handling amount is 2% of the orders' total amount
-		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage();
+		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage(); //Nodo 3
 		
 		double totalAmount = 0;
-		for(Order order : orders) {
-			totalAmount += order.getAmount();				
+		for(Order order : orders) { //Nodo 4
+			totalAmount += order.getAmount(); //Nodo 5			
 		}
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
+		Timestamp timestap = new Timestamp(System.currentTimeMillis()); //Nodo 6
 		int hour = Integer.valueOf(sdf.format(timestap));
 			
 		// and it also depends on the number of orders
@@ -71,13 +74,17 @@ public class ProductDelivery {
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
-		if(hour >= 22 || numberOrders > 10) {
-			handlingPercentage += 0.01;
+		if(hour >= 22 || numberOrders > 10) { //Nodo 7 + 8
+			handlingPercentage += 0.01; //Nodo 9
 		}
 
 		// The final handling amount
-		return totalAmount * handlingPercentage;
+		return totalAmount * handlingPercentage; //Nodo 10
 		
+	}
+	
+	public double calculateHandlingAmount() throws MissingOrdersException {
+		return calculateHandlingAmount(new SimpleDateFormat("HH"));
 	}
 
 	
