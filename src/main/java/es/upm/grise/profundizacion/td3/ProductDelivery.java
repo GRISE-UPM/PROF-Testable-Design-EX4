@@ -5,20 +5,19 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 
 public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
 	
-	public ProductDelivery() throws DatabaseProblemException {
+	public ProductDelivery(Connector connector) throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = connector.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
