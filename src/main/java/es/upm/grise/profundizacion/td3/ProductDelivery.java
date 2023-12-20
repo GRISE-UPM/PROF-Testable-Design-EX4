@@ -11,14 +11,17 @@ import java.sql.ResultSet;
 public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
-	
+	Connection connection;
+	public void setOrders(Vector<Order> orders){
+		this.orders=orders;
+	}
 	public ProductDelivery() throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -45,19 +48,41 @@ public class ProductDelivery {
 
 	}
 
+	public void consult(String consulta) throws DatabaseProblemException {
+		try {
+
+			// Create DB connection
+			connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+
+			// Read from the sensors table
+			String query = consulta;
+			Statement statement = connection.createStatement();
+			statement.executeQuery(query);
+
+			// Close the connection
+			connection.close();
+
+		} catch (Exception e) {
+
+			throw new DatabaseProblemException();
+
+		}
+	}
+
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException {
+	public double calculateHandlingAmount() throws MissingOrdersException {//Nodo 1
 		
 		// This method can only be invoked when there are orders to process
-		if(orders.isEmpty())
-			throw new MissingOrdersException();
+		if(orders.isEmpty())//Nodo 2
+			throw new MissingOrdersException();//Nodo 3
 		
 		// The handling amount is 2% of the orders' total amount
+		//Nodo 4
 		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage();
 		
 		double totalAmount = 0;
 		for(Order order : orders) {
-			totalAmount += order.getAmount();				
+			totalAmount += order.getAmount();//Nodo 5			
 		}
 		
 		// However, it increases depending on the time of the day
@@ -71,12 +96,12 @@ public class ProductDelivery {
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
-		if(hour >= 22 || numberOrders > 10) {
-			handlingPercentage += 0.01;
+		if(hour >= 22 || numberOrders > 10) {//Nodo 6 y 7
+			handlingPercentage += 0.01;//Nodo 8
 		}
 
 		// The final handling amount
-		return totalAmount * handlingPercentage;
+		return totalAmount * handlingPercentage;//Nodo 9
 		
 	}
 
