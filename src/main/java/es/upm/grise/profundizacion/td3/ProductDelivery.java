@@ -52,10 +52,11 @@ public class ProductDelivery {
 		
 		//1
 		// This method can only be invoked when there are orders to process
-		if(orders.isEmpty())
+		if(isEmpty()) {
 		//2
 			throw new MissingOrdersException();
-		
+		}
+	
 		//3
 		// The handling amount is 2% of the orders' total amount
 		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage();
@@ -90,6 +91,10 @@ public class ProductDelivery {
 		//9
 		return totalAmount * handlingPercentage;
 		
+	}
+	
+	public boolean isEmpty() {
+		return orders.isEmpty();
 	}
 
 	
