@@ -57,9 +57,26 @@ public class ProductDeliveryTest {
 		assertEquals(entraEnIf , productDelivery.calculateHandlingAmount());
 		
 	}
-
+	@Test
 	public void hourMenor22OrderMayor10() throws MissingOrdersException  {
+		int entraEnIf = 30;
+		orders = spy (new Vector<Order>());
+		// En caso de caer en la primera condicion de isEmpty(), que devuelva true. Por eso el
+		doReturn(15).when(productDelivery).obtainHour();
+		doReturn(25).when(productDelivery).getOrdersTam();
+		assertEquals(entraEnIf , productDelivery.calculateHandlingAmount());
 
+		
+	}
+
+	@Test
+	public void hourMenor22OrderMenor10() throws MissingOrdersException  {
+		int noEntraIf = 20;
+		orders = spy (new Vector<Order>());
+		// En caso de caer en la primera condicion de isEmpty(), que devuelva true. Por eso el
+		doReturn(15).when(productDelivery).obtainHour();
+		doReturn(4).when(productDelivery).getOrdersTam();
+		assertEquals(noEntraIf , productDelivery.calculateHandlingAmount());
 
 		
 	}
