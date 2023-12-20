@@ -7,13 +7,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Vector;
+
 public class ProductDeliveryTest {
 	
 	ProductDelivery productDelivery;
 	
 	@BeforeEach
 	public void setUp() throws DatabaseProblemException {
-		productDelivery = new ProductDelivery(new ProductDelivery.mockClass());
+		productDelivery = spy(new ProductDelivery(new ProductDelivery.mockClass()));
 	}
 
 
@@ -33,5 +35,36 @@ public class ProductDeliveryTest {
 	public void test() throws MissingOrdersException  {
 		assertEquals(20, productDelivery.calculateHandlingAmount());
 	}
+
+	@Test
+	// Comprueba que se tire la excepcion
+	public void testThrowsException() throws MissingOrdersException  {
+		Vector<Order> mockedOrders = spy (new Vector<Order>());
+		doReturn(true).when(mockedOrders).isEmpty();
+		productDelivery.setOrders(mockedOrders);
+		assertThrows(MissingOrdersException.class, () -> productDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testGoesinIFBothTrue() throws MissingOrdersException {
+		doReturn(23).when(productDelivery).getHour(any(),any());
+		doReturn(11).when(productDelivery).getnumberOrders();
+		assertEquals(30,productDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testGoesinIFFirstFalse() throws MissingOrdersException {
+		doReturn(20).when(productDelivery).getHour(any(),any());
+		doReturn(11).when(productDelivery).getnumberOrders();
+		assertEquals(30,productDelivery.calculateHandlingAmount());
+	}
+	@Test
+	public void testGoesinIFFalseFalse() throws MissingOrdersException {
+		doReturn(21).when(productDelivery).getHour(any(),any());
+		doReturn(9).when(productDelivery).getnumberOrders();
+		assertEquals(20,productDelivery.calculateHandlingAmount());
+	}
+
+
 
 }

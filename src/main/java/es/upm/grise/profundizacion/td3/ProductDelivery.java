@@ -17,9 +17,23 @@ public class ProductDelivery {
         }
 	}
 
+
 	private Vector<Order> orders = new Vector<Order>();
 	private mockClass mockClass;
 
+	// Añadido un setter para poder depurar esta parte
+	public void setOrders(Vector<Order> newOrder) {
+		orders = newOrder;
+	}
+
+	// Funcion para poder mockear getHour
+	public int getHour(SimpleDateFormat sdf ,Timestamp timestap) {
+		return Integer.valueOf(sdf.format(timestap));
+	}
+	// Funcion para poder mockear NumberOrders
+	public int getnumberOrders() {
+		return orders.size();
+	}
 
 	// Añadimos una dependencia para poder mockear getConnections
 	public ProductDelivery(mockClass mockClass) throws DatabaseProblemException {
@@ -77,10 +91,10 @@ public class ProductDelivery {
 		// We need to know the hour of the day. Minutes and seconds are not relevant
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
 		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		int hour = getHour(sdf,timestap);
 			
 		// and it also depends on the number of orders
-		int numberOrders = orders.size();
+		int numberOrders = getnumberOrders(); // facil de mockear
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
