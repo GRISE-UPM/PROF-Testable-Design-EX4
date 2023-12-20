@@ -30,7 +30,7 @@ public class ProductDeliveryTest {
         try {
             when(driverManager.getConnection(anyString())).thenThrow(new DatabaseProblemException());
 
-            new ProductDelivery();
+            productDelivery = new ProductDelivery();
 
             fail("Expected DatabaseProblemException to be thrown");
         } catch (DatabaseProblemException e) {
