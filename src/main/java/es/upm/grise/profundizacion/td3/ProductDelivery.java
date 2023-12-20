@@ -1,5 +1,6 @@
 package es.upm.grise.profundizacion.td3;
 
+import java.time.Clock;
 import java.util.Vector;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -12,10 +13,17 @@ public class ProductDelivery {
 
 	private Vector<Order> orders;
 
+	private Clock clock;
+
+	public ProductDelivery(OrdersDao ordersDao, Clock clock) throws DatabaseProblemException {
+
+		this.orders = ordersDao.getOrders();
+		this.clock = clock;
+
+	}
+
 	public ProductDelivery(OrdersDao ordersDao) throws DatabaseProblemException {
-
-		orders = ordersDao.getOrders();
-
+		this(ordersDao, Clock.systemDefaultZone());
 	}
 
 	// Calculate the handling amount
@@ -36,7 +44,7 @@ public class ProductDelivery {
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
 		SimpleDateFormat sdf = new SimpleDateFormat("HH"); //6
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
+		Timestamp timestap = new Timestamp(clock.millis());
 		int hour = Integer.valueOf(sdf.format(timestap));
 
 		// and it also depends on the number of orders
