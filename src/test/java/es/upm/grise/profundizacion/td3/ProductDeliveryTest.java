@@ -50,4 +50,17 @@ public class ProductDeliveryTest {
 		assertEquals(expectedAmount, productDelivery.calculateHandlingAmount(sdf));
 	}
 
+	@Test
+	public void testExtraHandlingCostHour() throws Exception  {
+		double expectedAmount = 0;
+		for(Order order : productDelivery.orders)
+			expectedAmount += order.getAmount();
+		expectedAmount *= (SystemConfiguration.getInstance().getHandlingPercentage() + 0.01);
+
+		SimpleDateFormat sdf = mock(SimpleDateFormat.class);
+		when(sdf.format(any())).thenReturn("23");
+		
+		assertEquals(expectedAmount, productDelivery.calculateHandlingAmount(sdf));
+	}
+
 }
