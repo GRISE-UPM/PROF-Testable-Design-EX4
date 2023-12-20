@@ -11,14 +11,17 @@ import java.sql.ResultSet;
 public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
-	
-	public ProductDelivery() throws DatabaseProblemException {
-		
+	private IDatabaseConnection databaseConnection;
+	private SystemConfiguration config;
+	 
+	public ProductDelivery(IDatabaseConnection db, String url, SystemConfiguration config) throws DatabaseProblemException {
+		this.databaseConnection = db;
+		this.config = config;
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = DriverManager.getConnection(url);
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -44,20 +47,25 @@ public class ProductDelivery {
 		}
 
 	}
+	
+	public void clearOrders()
+	{
+		this.orders.clear();
+	}
 
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException { 					//1
+	public double calculateHandlingAmount() throws MissingOrdersException {
 		
 		// This method can only be invoked when there are orders to process
-		if(orders.isEmpty())																	//2
-			throw new MissingOrdersException();													//3
+		if(orders.isEmpty())
+			throw new MissingOrdersException();
 		
 		// The handling amount is 2% of the orders' total amount
-		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage();	
+		double handlingPercentage = config.getHandlingPercentage();
 		
 		double totalAmount = 0;
-		for(Order order : orders) {																//4
-			totalAmount += order.getAmount();													//5
+		for(Order order : orders) {
+			totalAmount += order.getAmount();				
 		}
 		
 		// However, it increases depending on the time of the day
@@ -71,14 +79,14 @@ public class ProductDelivery {
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
-		if(hour >= 22 || numberOrders > 10) {													//6a || 6b
-			handlingPercentage += 0.01;															//7
+		if(hour >= 22 || numberOrders > 10) {
+			handlingPercentage += 0.01;
 		}
 
 		// The final handling amount
-		return totalAmount * handlingPercentage;												//8
+		return totalAmount * handlingPercentage;
 		
-	}																							//9
+	}
 
 	
 }
