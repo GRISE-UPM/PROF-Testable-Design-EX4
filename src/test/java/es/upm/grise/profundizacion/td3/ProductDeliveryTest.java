@@ -14,24 +14,38 @@ public class ProductDeliveryTest {
 
 	ProductDelivery productDelivery;
 	Connector connector;
+	System system;
 
 	@BeforeEach
 	public void setUp() throws DatabaseProblemException {
 		connector = mock(Connector.class);
+		system = mock(System.class);
 	}
 
 	@Test
 	public void test() throws MissingOrdersException {
-		assertEquals(20, productDelivery.calculateHandlingAmount());
+		assertEquals(20, productDelivery.calculateHandlingAmount(24));
 	}
 
 	@Test
-	public void dataBaseProblemException() throws DatabaseProblemException, SQLException {
+	public void test_dataBaseProblemException() throws DatabaseProblemException, SQLException {
 		when(connector.getConnection(anyString())).thenThrow(new DatabaseProblemException());
 
 		assertThrows(DatabaseProblemException.class, () -> {
 			new ProductDelivery(connector);
 		});
 	}
+
+	@Test
+	public void test_missingOrdersException() throws MissingOrdersException {
+		productDelivery.orders.removeAllElements();
+		assertThrowsExactly(MissingOrdersException.class, () ->
+			{productDelivery.calculateHandlingAmount(24);});
+	}
+
+	@Test
+	public void test_hourLess22() throws MissingOrdersException {
+		assertEquals(20, productDelivery.calculateHandlingAmount(21));
+	}	
 
 }

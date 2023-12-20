@@ -2,14 +2,12 @@ package es.upm.grise.profundizacion.td3;
 
 import java.util.Vector;
 import java.sql.Statement;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.ResultSet;
 
 public class ProductDelivery {
 	
-	private Vector<Order> orders = new Vector<Order>();
+	protected Vector<Order> orders = new Vector<Order>();
 	
 	public ProductDelivery(Connector connector) throws DatabaseProblemException {
 		
@@ -45,7 +43,7 @@ public class ProductDelivery {
 	}
 
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException { //I
+	public double calculateHandlingAmount(int hour) throws MissingOrdersException { //I
 		
 		// This method can only be invoked when there are orders to process
 		if(orders.isEmpty()) //1
@@ -61,9 +59,9 @@ public class ProductDelivery {
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		//SimpleDateFormat sdf = new SimpleDateFormat("HH");	
+		//Timestamp timestap = new Timestamp(System.currentTimeMillis());
+		//int hour = Integer.valueOf(sdf.format(timestap));
 			
 		// and it also depends on the number of orders
 		int numberOrders = orders.size();
