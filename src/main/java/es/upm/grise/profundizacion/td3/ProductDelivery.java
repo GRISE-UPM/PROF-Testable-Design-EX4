@@ -46,18 +46,18 @@ public class ProductDelivery {
 	}
 
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException {
+	public double calculateHandlingAmount() throws MissingOrdersException { // Nodo 1 (inicio)
 		
 		// This method can only be invoked when there are orders to process
-		if(orders.isEmpty())
-			throw new MissingOrdersException();
+		if(orders.isEmpty()) // Nodo 2
+			throw new MissingOrdersException(); // Nodo 3
 		
 		// The handling amount is 2% of the orders' total amount
 		double handlingPercentage = SystemConfiguration.getInstance().getHandlingPercentage();
 		
 		double totalAmount = 0;
-		for(Order order : orders) {
-			totalAmount += order.getAmount();				
+		for(Order order : orders) { // Nodo 4
+			totalAmount += order.getAmount();	// Nodo 5			
 		}
 		
 		// However, it increases depending on the time of the day
@@ -71,14 +71,14 @@ public class ProductDelivery {
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
-		if(hour >= 22 || numberOrders > 10) {
-			handlingPercentage += 0.01;
+		if(hour >= 22 || numberOrders > 10) { // Nodo 6
+			handlingPercentage += 0.01; // Nodo 7
 		}
 
 		// The final handling amount
-		return totalAmount * handlingPercentage;
+		return totalAmount * handlingPercentage; // Nodo 8
 		
-	}
+	} // Nodo 9 (final)
 
 	
 }
