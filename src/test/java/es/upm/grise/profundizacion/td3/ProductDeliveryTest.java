@@ -24,6 +24,20 @@ public class ProductDeliveryTest {
 		assertEquals(20, productDelivery.calculateHandlingAmount());
 	}
 
+    //Pregunta 3
+    /*@Test
+    public void testDatabaseErrorThrowsException() {
+        try {
+            when(driverManager.getConnection(anyString())).thenThrow(new DatabaseProblemException());
+
+            new ProductDelivery();
+
+            fail("Expected DatabaseProblemException to be thrown");
+        } catch (DatabaseProblemException e) {
+            // Test passed
+        }
+    }*/
+
     //Pregunta 4
     @Test
     public void testCalculateHandlingAmountWithEmptyOrders() {
@@ -35,6 +49,17 @@ public class ProductDeliveryTest {
             fail("Expected MissingOrdersException to be thrown");
         } catch (MissingOrdersException e) {
             // Test passed
+        }
+    }
+    @Test
+    public void testCalculateHandlingAmountWithOrders(){
+        try {
+            productDelivery.orders.add(new Order(1, 10));
+            productDelivery.orders.add(new Order(2, 20));
+
+            assertEquals(20.6, productDelivery.calculateHandlingAmount());
+        } catch (MissingOrdersException e) {
+            fail("Expected MissingOrdersException to be thrown");
         }
     }
 
