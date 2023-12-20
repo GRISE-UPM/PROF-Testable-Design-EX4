@@ -50,7 +50,7 @@ public class ProductDelivery {
 	}
 
 	// Calculate the handling amount
-	public double calculateHandlingAmount() throws MissingOrdersException {
+	protected double calculateHandlingAmount(SimpleDateFormat sdf) throws MissingOrdersException {
 		
 		// This method can only be invoked when there are orders to process
 		if(orders.isEmpty()) //Nodo 1
@@ -66,8 +66,7 @@ public class ProductDelivery {
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH"); //Nodo 6
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
+		Timestamp timestap = new Timestamp(System.currentTimeMillis()); //Nodo 6
 		int hour = Integer.valueOf(sdf.format(timestap));
 			
 		// and it also depends on the number of orders
@@ -82,6 +81,10 @@ public class ProductDelivery {
 		// The final handling amount
 		return totalAmount * handlingPercentage; //Nodo 10
 		
+	}
+	
+	public double calculateHandlingAmount() throws MissingOrdersException {
+		return calculateHandlingAmount(new SimpleDateFormat("HH"));
 	}
 
 	
