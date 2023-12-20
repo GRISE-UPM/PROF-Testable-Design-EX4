@@ -11,8 +11,7 @@ import static org.mockito.Mockito.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.SQLException;import java.sql.Statement;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -64,7 +63,7 @@ public class ProductDeliveryTest {
 	public void testEmptyOrders() throws MissingOrdersException {
 	    // Establecer que la lista de órdenes está vacía
 	    this.productDelivery.orders = new Vector<Order>();
-	
+
 	    // La siguiente línea debería lanzar MissingOrdersException
 	    assertThrows(MissingOrdersException.class, () -> {
 	        // Asegurar que se lanza la excepción cuando la lista de órdenes está vacía
@@ -73,6 +72,18 @@ public class ProductDeliveryTest {
 	}
 
 
+	@Test
+	public void testCalculateHandlingAmount_correctDifferentValues() throws Exception {
+	    // Configuración Inicial: Se agregan dos órdenes a la lista con montos diferentes
+	    productDelivery.orders.add(new Order(1, 15.5));
+	    productDelivery.orders.add(new Order(2, 25.5));
+
+	    // Ejecución del Método a Probar: Se llama al método calculateHandlingAmount
+	    double result = productDelivery.calculateHandlingAmount();
+
+	    // Verificación del Resultado: Se compara el resultado con un valor esperado
+	    assertEquals(8.22, result, 0.01); // Utilizamos un delta de 0.01 para tener en cuenta posibles variaciones en números decimales
+	}
 
 }
 
