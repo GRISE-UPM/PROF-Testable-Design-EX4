@@ -15,6 +15,11 @@ public class SystemConfiguration {
 			return instance;
 		}	
 	}
+	
+	public static void setInstance(SystemConfiguration newInstance)
+	{
+		instance = newInstance;
+	}
 
 	public double getHandlingPercentage() {
 		return handlingPercentage;
