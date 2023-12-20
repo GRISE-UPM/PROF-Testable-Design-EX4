@@ -10,10 +10,11 @@ import java.sql.ResultSet;
 
 public class ProductDelivery {
 	
-	private Vector<Order> orders = new Vector<Order>();
+	Vector<Order> orders = new Vector<Order>();
 	
+	//public ProductDelivery(DatabaseAccessImpl dbAccess) throws DatabaseProblemException {
 	public ProductDelivery() throws DatabaseProblemException {
-		
+
 		// Orders are loaded into the orders vector for processing
 		try {
 			
