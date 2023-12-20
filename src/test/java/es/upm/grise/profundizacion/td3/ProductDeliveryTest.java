@@ -20,4 +20,11 @@ public class ProductDeliveryTest {
 			{new ProductDelivery("wrong_db");});
 	}
 
+	@Test
+	public void testOrdersEmpty() throws Exception  {
+		productDelivery.orders.removeAllElements();
+		assertThrowsExactly(MissingOrdersException.class, () ->
+			{productDelivery.calculateHandlingAmount();});
+	}
+
 }
