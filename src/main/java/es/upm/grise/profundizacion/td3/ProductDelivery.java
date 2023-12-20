@@ -81,8 +81,16 @@ public class ProductDelivery  {
 
 		// The final handling amount
 		return totalAmount * handlingPercentage;// nodo 10
+
+		//nodo 11 fin de programa
 		
 	}
+
+    public void setOrders(Vector<Order> orders) {
+        this.orders = orders;
+    }
+
+    
 
 
 	
