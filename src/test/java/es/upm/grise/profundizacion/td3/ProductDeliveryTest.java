@@ -19,7 +19,7 @@ public class ProductDeliveryTest {
     ProductDelivery productDelivery;
 
     @Mock
-    Connection connection;
+    OrdersDao ordersDao;
 
     private AutoCloseable mocksClose;
 
@@ -40,12 +40,12 @@ public class ProductDeliveryTest {
     }
 
     @Test
-    public void testErrorIsThrownOnDatabaseError() throws SQLException {
+    public void testErrorIsThrownOnDatabaseError() throws DatabaseProblemException {
         SQLException fakeSqlException = mock();
-        when(connection.createStatement()).thenThrow(fakeSqlException);
+        when(ordersDao.getOrders()).thenThrow(fakeSqlException);
 
-        Assertions.assertThrows(DatabaseProblemException.class,() -> {
-            productDelivery = new ProductDelivery(connection);
+        Assertions.assertThrows(DatabaseProblemException.class, () -> {
+            productDelivery = new ProductDelivery(ordersDao);
         });
     }
 

@@ -10,35 +10,11 @@ import java.sql.ResultSet;
 
 public class ProductDelivery {
 
-	private Vector<Order> orders = new Vector<Order>();
+	private Vector<Order> orders;
 
-	public ProductDelivery(Connection connection) throws DatabaseProblemException {
+	public ProductDelivery(OrdersDao ordersDao) throws DatabaseProblemException {
 
-		// Orders are loaded into the orders vector for processing
-		try {
-
-			// Read from the orders table
-			String query = "SELECT * FROM orders";
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(query);
-
-			// Iterate until we get all orders' data
-			while (resultSet.next()) {
-
-				int id = resultSet.getInt("id");
-				double amount = resultSet.getDouble("amount");
-				orders.add(new Order(id, amount));
-
-			}
-
-			// Close the connection
-			connection.close();
-
-		} catch (Exception e) {
-
-			throw new DatabaseProblemException();
-
-		}
+		orders = ordersDao.getOrders();
 
 	}
 
