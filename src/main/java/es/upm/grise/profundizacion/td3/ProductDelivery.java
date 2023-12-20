@@ -77,7 +77,7 @@ public class ProductDelivery {
 			
 		// and it also depends on the number of orders
 		//6
-		int numberOrders = orders.size();
+		int numberOrders = numberOrders();
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
@@ -95,6 +95,10 @@ public class ProductDelivery {
 	
 	public boolean isEmpty() {
 		return orders.isEmpty();
+	}
+	
+	public int numberOrders() {
+		return orders.size();
 	}
 
 	

@@ -44,7 +44,18 @@ public class ProductDeliveryTest {
 		
 		when(productDelivery.isEmpty()).thenReturn(true);
 		
+	
 		assertEquals(MissingOrdersException.class, productDelivery.calculateHandlingAmount());
+		
+	}
+	
+	@Test
+	public void testCamino3() throws MissingOrdersException{
+		productDelivery = mock(ProductDelivery.class);
+		
+		when(productDelivery.numberOrders()).thenReturn(9);
+		
+		assertEquals(0.0, productDelivery.calculateHandlingAmount());
 		
 	}
 
