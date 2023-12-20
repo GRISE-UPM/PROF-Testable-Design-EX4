@@ -1,6 +1,8 @@
 package es.upm.grise.profundizacion.td3;
 
 import java.time.Clock;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Vector;
 import java.sql.Statement;
 import java.sql.Timestamp;
@@ -43,9 +45,9 @@ public class ProductDelivery {
 
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH"); //6
-		Timestamp timestap = new Timestamp(clock.millis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		//SimpleDateFormat sdf = new SimpleDateFormat("HH"); //6
+		//Timestamp timestap = new Timestamp(clock.instant().toEpochMilli());
+		int hour = LocalDateTime.now(clock).getHour();
 
 		// and it also depends on the number of orders
 		int numberOrders = orders.size();

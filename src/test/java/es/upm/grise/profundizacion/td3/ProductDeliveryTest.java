@@ -90,7 +90,19 @@ public class ProductDeliveryTest {
             Assertions.assertEquals(expecting,result);
         }
 
+        @Test
+        void testListWithContentAfter22() throws DatabaseProblemException, MissingOrdersException {
+            Instant instant = Instant.parse("2023-12-20T22:00:00Z");
+            Clock clock = Clock.fixed(instant, ZoneId.systemDefault());
+            productDelivery = new ProductDelivery(ordersDao, clock);
 
+            orders.add(order1);
+            orders.add(order2);
+
+            double result = productDelivery.calculateHandlingAmount();
+            double expecting = (order1.amount + order2.amount) * 0.03;
+            Assertions.assertEquals(expecting,result);
+        }
 
 
 
