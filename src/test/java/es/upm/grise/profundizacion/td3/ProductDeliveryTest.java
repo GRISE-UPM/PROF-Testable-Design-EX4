@@ -1,11 +1,13 @@
 package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.sql.Driver;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Vector;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,5 +54,21 @@ public class ProductDeliveryTest {
 		assertThrows(MissingOrdersException.class, () -> new ProductDelivery(adminDriver).calculateHandlingAmount());
 	}
 
+	@Test
+	public void testC3() throws Exception {
+		SimpleDateFormat mockDataFormaInteger=mock(SimpleDateFormat.class);
+		when(mockDataFormaInteger.format(anyLong())).thenReturn("23");
 
+		try {
+			assertTrue(productDelivery.calculateHandlingAmount()==20.);
+		} catch (MissingOrdersException e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
+
+	@Test
+	public void testC4() throws Exception {
+
+	}
 }
