@@ -20,7 +20,7 @@ public class ProductDeliveryTest {
 	
 	@BeforeEach
 	public void setUp() throws DatabaseProblemException {
-		productDelivery = new ProductDelivery();
+		productDelivery = new ProductDelivery(null);
 	}
 	
 	@Test
@@ -28,15 +28,12 @@ public class ProductDeliveryTest {
 		assertEquals(20, productDelivery.calculateHandlingAmount());
 	}
 
-	// @Test
-	// public void testDataBaseProblemException() {
-	// 	DriverManager mockMannager=mock(DriverManager.class);
-		
-		
-	// 	assertThrows(DatabaseProblemException.class, () -> {
-	// 		new ProductDelivery();
-	// 	});
-	// }
+	@Test
+	public void testDataBaseProblemException() {
+		assertThrows(DatabaseProblemException.class, () -> {
+			new ProductDelivery("sghark");
+		});
+	}
 
 	@Test
 	public void testCamino1(){
@@ -59,5 +56,16 @@ public class ProductDeliveryTest {
 		}
 	}
 
-	
+	@Test
+	public void testCamino3(){
+		SimpleDateFormat mockDataFormaInteger=mock(SimpleDateFormat.class);
+		when(mockDataFormaInteger.format(anyLong())).thenReturn("23");
+
+		try {
+			assertTrue(productDelivery.calculateHandlingAmount()==20.);
+		} catch (MissingOrdersException e) {
+			fail();
+			e.printStackTrace();
+		}
+	}
 }

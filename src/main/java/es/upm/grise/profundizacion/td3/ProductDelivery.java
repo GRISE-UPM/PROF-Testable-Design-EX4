@@ -11,14 +11,17 @@ import java.sql.ResultSet;
 public class ProductDelivery {
 	
 	protected Vector<Order> orders = new Vector<Order>();
-	
-	public ProductDelivery() throws DatabaseProblemException {
+
+	public ProductDelivery(String dbLocation) throws DatabaseProblemException {
+		if(dbLocation==null){
+			dbLocation="jdbc:sqlite:resources/orders.db";
+		}
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = DriverManager.getConnection(dbLocation);
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
