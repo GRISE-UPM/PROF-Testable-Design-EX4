@@ -3,6 +3,7 @@ package es.upm.grise.profundizacion.td3;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.text.SimpleDateFormat;
+import java.util.Vector;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,19 +34,17 @@ public class ProductDeliveryTest {
 
 	@Test
 	public void testNoExtraHandlingCost() throws Exception  {
-		int ordersSize = productDelivery.orders.size();
-		while(ordersSize > 10) {
-			productDelivery.orders.remove(ordersSize - 1);
-			ordersSize--;
-		}
-
+		Vector<Order> orders = spy(productDelivery.orders);
+		productDelivery.orders = orders;
 		double expectedAmount = 0;
-		for(Order order : productDelivery.orders)
+		for(Order order : orders)
 			expectedAmount += order.getAmount();
 		expectedAmount *= SystemConfiguration.getInstance().getHandlingPercentage();
 
 		SimpleDateFormat sdf = mock(SimpleDateFormat.class);
 		when(sdf.format(any())).thenReturn("10");
+		
+		when(orders.size()).thenReturn(5);
 		
 		assertEquals(expectedAmount, productDelivery.calculateHandlingAmount(sdf));
 	}
@@ -59,6 +58,23 @@ public class ProductDeliveryTest {
 
 		SimpleDateFormat sdf = mock(SimpleDateFormat.class);
 		when(sdf.format(any())).thenReturn("23");
+		
+		assertEquals(expectedAmount, productDelivery.calculateHandlingAmount(sdf));
+	}
+
+	@Test
+	public void testExtraHandlingCostItems() throws Exception  {
+		Vector<Order> orders = spy(productDelivery.orders);
+		productDelivery.orders = orders;
+		double expectedAmount = 0;
+		for(Order order : orders)
+			expectedAmount += order.getAmount();
+		expectedAmount *= (SystemConfiguration.getInstance().getHandlingPercentage() + 0.01);
+
+		SimpleDateFormat sdf = mock(SimpleDateFormat.class);
+		when(sdf.format(any())).thenReturn("10");
+
+		when(orders.size()).thenReturn(11);
 		
 		assertEquals(expectedAmount, productDelivery.calculateHandlingAmount(sdf));
 	}
