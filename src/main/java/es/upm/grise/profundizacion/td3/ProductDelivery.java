@@ -7,10 +7,49 @@ import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
-public class ProductDelivery {
+public class ProductDelivery  {
 	
 	private Vector<Order> orders = new Vector<Order>();
+	private DatabaseConnection databaseConnection;
+	
+	public ProductDelivery(DatabaseConnection databaseConnection) throws DatabaseProblemException {
+        this.databaseConnection = databaseConnection;
+        loadOrders();
+    }
+	
+	private void loadOrders() throws DatabaseProblemException {
+		Connection connection = null;
+		try {
+			// Get the database connection
+			connection = databaseConnection.getConnection();
+	
+			// Read from the orders table
+			String query = "SELECT * FROM orders";
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery(query);
+	
+			// Iterate until we get all orders' data
+			while (resultSet.next()) {
+				int id = resultSet.getInt("id");
+				double amount = resultSet.getDouble("amount");
+				orders.add(new Order(id, amount));
+			}
+		} catch (SQLException e) {
+			throw new DatabaseProblemException();
+		} finally {
+			// Close the connection in the finally block to ensure it's always closed
+			if (connection != null) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					// Log or handle the exception if necessary
+				}
+			}
+		}
+	}
+	
 	
 	public ProductDelivery() throws DatabaseProblemException {
 		
