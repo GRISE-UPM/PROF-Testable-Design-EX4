@@ -2,6 +2,7 @@ package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -12,6 +13,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Vector;
 
 public class ProductDeliveryTest {
 	
@@ -54,5 +59,20 @@ public class ProductDeliveryTest {
         // The following line should throw DatabaseProblemException
         productDelivery.calculateHandlingAmount();
     }*/
+
+	@Test
+	public void testEmptyOrders() throws MissingOrdersException {
+	    // Establecer que la lista de órdenes está vacía
+	    this.productDelivery.orders = new Vector<Order>();
+	
+	    // La siguiente línea debería lanzar MissingOrdersException
+	    assertThrows(MissingOrdersException.class, () -> {
+	        // Asegurar que se lanza la excepción cuando la lista de órdenes está vacía
+	        assertEquals(55, productDelivery.calculateHandlingAmount());
+	    }, "Se esperaba una excepción cuando la lista de órdenes está vacía");
+	}
+
+
+
 }
 

@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 public class ProductDelivery  {
 	
-	private Vector<Order> orders = new Vector<Order>();
+	Vector<Order> orders = new Vector<Order>();
 	private DatabaseConnection databaseConnection;
 	
 	public ProductDelivery(DatabaseConnection databaseConnection) throws DatabaseProblemException {
@@ -119,5 +119,4 @@ public class ProductDelivery  {
 		
 	}
 
-	
 }
