@@ -7,10 +7,20 @@ import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
+
+	/*
+	 * Para permitir el mocking de la clase DriverManager,
+	 * se saca getConnection del contructor y se 
+	 * crea un metodo protected que devuelve una conexion
+	 */
+	protected Connection createConnection() throws SQLException {
+        return DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+    }
 	
 	public ProductDelivery() throws DatabaseProblemException {
 		
@@ -18,7 +28,8 @@ public class ProductDelivery {
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			//Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = createConnection();
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
