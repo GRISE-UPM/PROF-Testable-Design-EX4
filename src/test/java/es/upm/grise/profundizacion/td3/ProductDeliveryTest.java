@@ -72,11 +72,11 @@ public class ProductDeliveryTest {
 
 	@Test
 	public void testFourthPath() throws MissingOrdersException {
-		// Se pasa por nodo 7 tras 6b, y se acaba, o sea, hay < 22 hours y > 10 orders
+		// Se pasa por nodo 7 tras 6b, y se acaba, o sea, hay >= 22 hours y > 10 orders
 
 		ProductDelivery spyDelivery = spy(productDelivery);
 
-		doReturn(10).when(spyDelivery).getHour(any(),any());
+		doReturn(22).when(spyDelivery).getHour(any(),any());
 		doReturn(15).when(spyDelivery).getOrders(spyDelivery.orders);
 		assertEquals(30, spyDelivery.calculateHandlingAmount());
 	}
