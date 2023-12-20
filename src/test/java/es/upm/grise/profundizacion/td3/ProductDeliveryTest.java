@@ -105,6 +105,22 @@ public class ProductDeliveryTest {
         }
 
 
+        @Test
+        void testListWithContentBefore22AndMoreThan10Items() throws DatabaseProblemException, MissingOrdersException {
+            Instant instant = Instant.parse("2023-12-20T10:00:00Z");
+            Clock clock = Clock.fixed(instant, ZoneId.systemDefault());
+            productDelivery = new ProductDelivery(ordersDao, clock);
+
+            int nItems = 11;
+
+            for(int i = 0; i<nItems;i++){
+                orders.add(order1);
+            }
+
+            double result = productDelivery.calculateHandlingAmount();
+            double expecting = (order1.amount * nItems) * 0.03;
+            Assertions.assertEquals(expecting,result);
+        }
 
 
     }
