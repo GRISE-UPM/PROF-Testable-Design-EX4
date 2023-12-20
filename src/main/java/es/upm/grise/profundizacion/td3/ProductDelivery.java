@@ -35,7 +35,7 @@ public class ProductDelivery {
 		// We need to know the hour of the day. Minutes and seconds are not relevant
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");	        //
 		Timestamp timestap = new Timestamp(System.currentTimeMillis());     //
-		int hour = Integer.valueOf(sdf.format(timestap));                   //
+		int hour = this.getHour(sdf, timestap);                   //
 																			//    6
 			                                                                //
 		// and it also depends on the number of orders                      //
@@ -53,5 +53,8 @@ public class ProductDelivery {
 		                                         // 9
 	}                                            //
 
-	
+	public int getHour(SimpleDateFormat sdf ,Timestamp timestap) {
+        return Integer.valueOf(sdf.format(timestap));
+    }
+
 }
