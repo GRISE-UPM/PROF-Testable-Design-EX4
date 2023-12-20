@@ -1,6 +1,9 @@
 package es.upm.grise.profundizacion.td3;
 
 import java.util.Vector;
+
+import es.upm.grise.profundizacion.ProducDeliveryDate;
+
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -64,9 +67,8 @@ public class ProductDelivery {
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		ProducDeliveryDate pdd = new ProducDeliveryDate();
+		int hour = pdd.getTime();
 			
 		// and it also depends on the number of orders
 		int numberOrders = orders.size();

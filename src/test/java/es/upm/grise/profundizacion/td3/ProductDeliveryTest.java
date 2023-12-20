@@ -1,11 +1,14 @@
 package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import es.upm.grise.profundizacion.ProducDeliveryDate;
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables;
 import uk.org.webcompere.systemstubs.jupiter.SystemStub;
 import uk.org.webcompere.systemstubs.jupiter.SystemStubsExtension;
@@ -37,6 +40,14 @@ public class ProductDeliveryTest {
 			this.productDelivery.orders.add(new Order(i, 10));
 		}
 		assertEquals(33, productDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testMoreThan22Hours() throws MissingOrdersException {
+		ProducDeliveryDate pdd = mock(ProducDeliveryDate.class);
+		when(pdd.getTime()).thenReturn(23);
+		this.productDelivery.orders.add(new Order(1, 10));
+		assertEquals(20.2, productDelivery.calculateHandlingAmount());
 	}
 
 	@Test
