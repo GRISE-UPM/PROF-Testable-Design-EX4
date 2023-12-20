@@ -12,13 +12,13 @@ public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
 	
-	public ProductDelivery() throws DatabaseProblemException {
+	public ProductDelivery(AdminDriver aux) throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = aux.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
