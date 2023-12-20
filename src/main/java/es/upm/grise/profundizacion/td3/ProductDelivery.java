@@ -1,72 +1,34 @@
 package es.upm.grise.profundizacion.td3;
 
+import java.sql.*;
 import java.util.Vector;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 
 public class ProductDelivery {
 	
 	private Vector<Order> orders = new Vector<Order>();
 	Connection connection;
+	private DataBaseError dbError;
 	public void setOrders(Vector<Order> orders){
 		this.orders=orders;
 	}
-	public ProductDelivery() throws DatabaseProblemException {
-		
-		// Orders are loaded into the orders vector for processing
+	public ProductDelivery(DataBaseError dbError) throws DatabaseProblemException {
+		this.dbError= dbError;
 		try {
-			
-			// Create DB connection
-			connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
-
-			// Read from the orders table
-			String query = "SELECT * FROM orders";
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(query);
-
-			// Iterate until we get all orders' data
-			while (resultSet.next()) {
-				
-				int id = resultSet.getInt("id");
-				double amount = resultSet.getDouble("amount");
-				orders.add(new Order(id, amount));
-				
-			}
-
-			// Close the connection
-			connection.close();
-
+			orders=dbError.dataBaseCreated();
 		} catch (Exception e) {
-			
-			throw new DatabaseProblemException(); 
-			
+			throw new DatabaseProblemException();
 		}
-
 	}
 
-	public void consult(String consulta) throws DatabaseProblemException {
-		try {
+	//Funcion para poder mockear hour (darle el valor que se quiera)
+	public int gethour(SimpleDateFormat sdf, Timestamp timestap){
+		return Integer.valueOf(sdf.format(timestap));
+	}
 
-			// Create DB connection
-			connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
-
-			// Read from the sensors table
-			String query = consulta;
-			Statement statement = connection.createStatement();
-			statement.executeQuery(query);
-
-			// Close the connection
-			connection.close();
-
-		} catch (Exception e) {
-
-			throw new DatabaseProblemException();
-
-		}
+	//Funcion para poder mockear numberOrders (darle el valor que se quiera)
+	public int getOrders(){
+		return orders.size();
 	}
 
 	// Calculate the handling amount
@@ -82,17 +44,17 @@ public class ProductDelivery {
 		
 		double totalAmount = 0;
 		for(Order order : orders) {
-			totalAmount += order.getAmount();//Nodo 5			
+			totalAmount += order.getAmount();//Nodo 5
 		}
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
 		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		int hour = gethour(sdf,timestap);
 			
 		// and it also depends on the number of orders
-		int numberOrders = orders.size();
+		int numberOrders = getOrders();
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
