@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Vector;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +21,8 @@ public class ProductDeliveryTest {
 	ProductDelivery productDelivery;
 
 	@SystemStub
-	private EnvironmentVariables variables = new EnvironmentVariables("database.location","jdbc:sqlite:resources/orders.db");
+	private EnvironmentVariables variables = new EnvironmentVariables("database.location",
+			"jdbc:sqlite:resources/orders.db");
 
 	@BeforeEach
 	public void setUp() throws DatabaseProblemException {
@@ -48,6 +51,14 @@ public class ProductDeliveryTest {
 		when(pdd.getTime()).thenReturn(23);
 		this.productDelivery.orders.add(new Order(1, 10));
 		assertEquals(20.2, productDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testOrdersEmpty() throws MissingOrdersException {
+		this.productDelivery.orders = new Vector<Order>();
+		assertThrows(MissingOrdersException.class, () -> {
+			assertEquals(33, productDelivery.calculateHandlingAmount());
+		}, "Expected throw when orders is empty");
 	}
 
 	@Test
