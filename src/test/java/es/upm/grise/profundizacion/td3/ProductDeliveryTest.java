@@ -7,16 +7,25 @@ import org.junit.jupiter.api.Test;
 
 public class ProductDeliveryTest {
 	
-	ProductDelivery productDelivery;
+    ProductDelivery productDelivery;
 	
-	@BeforeEach
-	public void setUp() throws DatabaseProblemException {
-		productDelivery = new ProductDelivery();
-	}
+    @BeforeEach
+    public void setUp() throws DatabaseProblemException {
+        productDelivery = new ProductDelivery();
+    }
 	
-	@Test
-	public void test() throws MissingOrdersException  {
-		assertEquals(20, productDelivery.calculateHandlingAmount());
-	}
+    @Test
+    public void test() throws MissingOrdersException  {
+        assertEquals(20, productDelivery.calculateHandlingAmount());
+    }
+
+    @Test
+    public void testCalculateHandelingThrowMissingOrdersException() {
+        productDelivery.orders.clear();
+
+        assertThrows(MissingOrdersException.class, () -> {
+                productDelivery.calculateHandlingAmount();
+            });
+    }
 
 }
