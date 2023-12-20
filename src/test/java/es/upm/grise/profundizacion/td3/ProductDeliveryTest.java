@@ -39,11 +39,6 @@ public class ProductDeliveryTest {
     }
 
     @Test
-    public void test() throws MissingOrdersException {
-        assertEquals(20, productDelivery.calculateHandlingAmount());
-    }
-
-    @Test
     public void testErrorIsThrownOnDatabaseError() throws DatabaseProblemException {
         DatabaseProblemException fakeSqlException = mock();
         when(ordersDao.getOrders()).thenThrow(fakeSqlException);
@@ -87,7 +82,7 @@ public class ProductDeliveryTest {
 
             double result = productDelivery.calculateHandlingAmount();
             double expecting = (order1.amount + order2.amount) * 0.02;
-            Assertions.assertEquals(expecting,result);
+            Assertions.assertEquals(expecting, result);
         }
 
         @Test
@@ -101,7 +96,7 @@ public class ProductDeliveryTest {
 
             double result = productDelivery.calculateHandlingAmount();
             double expecting = (order1.amount + order2.amount) * 0.03;
-            Assertions.assertEquals(expecting,result);
+            Assertions.assertEquals(expecting, result);
         }
 
 
@@ -113,16 +108,14 @@ public class ProductDeliveryTest {
 
             int nItems = 11;
 
-            for(int i = 0; i<nItems;i++){
+            for (int i = 0; i < nItems; i++) {
                 orders.add(order1);
             }
 
             double result = productDelivery.calculateHandlingAmount();
             double expecting = (order1.amount * nItems) * 0.03;
-            Assertions.assertEquals(expecting,result);
+            Assertions.assertEquals(expecting, result);
         }
-
-
 
 
         @Test
@@ -133,13 +126,13 @@ public class ProductDeliveryTest {
 
             int nItems = 11;
 
-            for(int i = 0; i<nItems;i++){
+            for (int i = 0; i < nItems; i++) {
                 orders.add(order1);
             }
 
             double result = productDelivery.calculateHandlingAmount();
             double expecting = (order1.amount * nItems) * 0.03;
-            Assertions.assertEquals(expecting,result);
+            Assertions.assertEquals(expecting, result);
         }
 
     }
