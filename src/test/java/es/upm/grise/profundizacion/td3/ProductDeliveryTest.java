@@ -2,7 +2,9 @@ package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
 import java.sql.SQLException;
@@ -16,21 +18,17 @@ public class ProductDeliveryTest {
 	
 	ProductDelivery productDelivery;
 
-	//@Test
-	//public void testDatabaseError() throws DatabaseProblemException {
-	//	DatabaseAccessImpl mockDbAccess = Mockito.spy(DatabaseAccessImpl.class);
-	//
-    //    try {
-    //        Mockito.when(mockDbAccess.executeQuery(Mockito.anyString())).thenThrow(SQLException.class);
-	//
-    //        assertThrows(DatabaseProblemException.class, () -> {
-    //            new ProductDelivery(mockDbAccess);
-    //        });
-    //    } catch (SQLException e) {
-    //        // Handle the exception or fail the test if this exception is not expected
-    //        fail("Unexpected SQLException thrown in test");
-    //    }
-	//}
+	@BeforeEach
+	public void setUp() throws DatabaseProblemException{
+		productDelivery = new ProductDelivery(new ProductDelivery.dummyConnectionClass());
+	}
+
+	@Test
+	public void testDatabaseError() throws DatabaseProblemException {
+		ProductDelivery.dummyConnectionClass dummy = mock(ProductDelivery.dummyConnectionClass.class);
+		Mockito.when(dummy.getConnection(anyString())).thenThrow(new DatabaseProblemException());
+		assertThrows(DatabaseProblemException.class, () -> new ProductDelivery(dummy));
+	}
 
 	@Test
 	public void testFirstPath() throws MissingOrdersException {
@@ -38,7 +36,7 @@ public class ProductDeliveryTest {
 		Vector<Order> mockedOrders = spy (new Vector<Order>());
 
 		try {
-			productDelivery = new ProductDelivery();
+			productDelivery = new ProductDelivery(new ProductDelivery.dummyConnectionClass());
 		} catch (DatabaseProblemException e) {
 			fail("Unexpected DatabaseProblemException");
 		}
@@ -53,11 +51,6 @@ public class ProductDeliveryTest {
 	@Test
 	public void testSecondPath() throws MissingOrdersException {
 		// Se pasa por 6a y va a 7, es decir, que haya 10 o menos orders
-		try {
-			productDelivery = new ProductDelivery();
-		} catch (DatabaseProblemException e) {
-			fail("Unexpected DatabaseProblemException");
-		}
 
 		ProductDelivery spyDelivery = spy(productDelivery);
 
@@ -69,11 +62,6 @@ public class ProductDeliveryTest {
 	@Test
 	public void testThirdPath() throws MissingOrdersException {
 		// Se pasa por 6a y 6b, y se sale, es decir, que hour < 22 y orders <= 10
-		try {
-			productDelivery = new ProductDelivery();
-		} catch (DatabaseProblemException e) {
-			fail("Unexpected DatabaseProblemException");
-		}
 
 		ProductDelivery spyDelivery = spy(productDelivery);
 
@@ -85,11 +73,6 @@ public class ProductDeliveryTest {
 	@Test
 	public void testFourthPath() throws MissingOrdersException {
 		// Se pasa por nodo 7 tras 6b, y se acaba, o sea, hay < 22 hours y > 10 orders
-		try {
-			productDelivery = new ProductDelivery();
-		} catch (DatabaseProblemException e) {
-			fail("Unexpected DatabaseProblemException");
-		}
 
 		ProductDelivery spyDelivery = spy(productDelivery);
 
