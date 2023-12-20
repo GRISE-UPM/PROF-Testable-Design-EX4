@@ -4,19 +4,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+@ExtendWith(MockitoExtension.class)
 public class ProductDeliveryTest {
 	
+	@InjectMocks
 	ProductDelivery productDelivery;
+
+	@Mock
+	DBUtilities dbUtilities;
 	
-	@BeforeEach
-	public void setUp() throws DatabaseProblemException {
-		productDelivery = new ProductDelivery();
-	}
 	
 	@Test
-	public void test() throws MissingOrdersException  {
-		assertEquals(20, productDelivery.calculateHandlingAmount());
+	public void whenDBError_throwDatabaseProblemException() throws DatabaseProblemException  {
+		Mockito.when(dbUtilities.getOrders())
+			.thenThrow(DatabaseProblemException.class);
+		assertThrows(DatabaseProblemException.class, () -> new ProductDelivery(dbUtilities)
+		, "DatabaseProblemException should be thrown");
 	}
 
 }
