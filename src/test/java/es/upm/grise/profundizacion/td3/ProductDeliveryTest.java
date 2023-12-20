@@ -1,6 +1,7 @@
 package es.upm.grise.profundizacion.td3;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.spy;
 
@@ -48,4 +49,18 @@ public class ProductDeliveryTest {
             });
 	}
 
+	@Test
+	public void testThirdPath() throws MissingOrdersException {
+		try {
+			productDelivery = new ProductDelivery();
+		} catch (DatabaseProblemException e) {
+			fail("Unexpected DatabaseProblemException");
+		}
+
+		ProductDelivery spyDelivery = spy(productDelivery);
+
+		doReturn(22).when(spyDelivery).getHour(any(),any());
+		doReturn(9).when(spyDelivery).getOrders(spyDelivery.orders);
+		assertEquals(30, spyDelivery.calculateHandlingAmount());
+	}
 }
