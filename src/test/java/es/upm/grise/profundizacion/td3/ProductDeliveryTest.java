@@ -35,7 +35,7 @@ public class ProductDeliveryTest {
 
 	@Test
 	// Comprueba que se tire la excepcion
-	public void chequearDBvacia() throws MissingOrdersException  {
+	public void chequearOrdersVacio() throws MissingOrdersException  {
 		orders = spy (new Vector<Order>());
 		// En caso de caer en la primera condicion de isEmpty(), que devuelva true. Por eso el
 		doReturn(true).when(orders).isEmpty();
@@ -44,6 +44,28 @@ public class ProductDeliveryTest {
 			productDelivery.calculateHandlingAmount();
 		});
 	}
+
+
+	@Test
+	// Comprueba que se tire la excepcion
+	public void hourMayor22() throws MissingOrdersException  {
+
+		int entraEnIf = 30;
+		orders = spy (new Vector<Order>());
+		// En caso de caer en la primera condicion de isEmpty(), que devuelva true. Por eso el
+		doReturn(24).when(productDelivery).obtainHour();
+		assertEquals(entraEnIf , productDelivery.calculateHandlingAmount());
+		
+	}
+
+	public void hourMenor22OrderMayor10() throws MissingOrdersException  {
+
+
+		
+	}
+
+
+	
 
 
 }

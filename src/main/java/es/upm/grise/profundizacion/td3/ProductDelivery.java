@@ -12,6 +12,8 @@ public class ProductDelivery {
 	
 	protected Vector<Order> orders = new Vector<Order>();
 
+
+
 	public ConnectionDB connectionDB;
 	
 	public ProductDelivery() throws DatabaseProblemException {
@@ -62,14 +64,11 @@ public class ProductDelivery {
 			totalAmount += order.getAmount();				
 		}
 		
-		// However, it increases depending on the time of the day
-		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		
+		int hour = obtainHour();
 			
 		// and it also depends on the number of orders
-		int numberOrders = orders.size();
+		int numberOrders = getOrdersTam();
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
@@ -81,6 +80,20 @@ public class ProductDelivery {
 		return totalAmount * handlingPercentage;
 		
 	}
+
+	public int getOrdersTam() {
+		return orders.size();
+	}
+
+	public int obtainHour() {
+		// However, it increases depending on the time of the day
+		// We need to know the hour of the day. Minutes and seconds are not relevant
+		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
+		Timestamp timestap = new Timestamp(System.currentTimeMillis());
+		int hour = Integer.valueOf(sdf.format(timestap));
+		return hour;
+	}
+
 
 	
 }
