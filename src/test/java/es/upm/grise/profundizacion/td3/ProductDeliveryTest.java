@@ -54,6 +54,14 @@ public class ProductDeliveryTest {
 	}
 
 	@Test
+	public void testLessThan22Hours() throws MissingOrdersException {
+		ProducDeliveryDate pdd = mock(ProducDeliveryDate.class);
+		when(pdd.getTime()).thenReturn(21);
+		this.productDelivery.orders.add(new Order(1, 10));
+		assertEquals(20.2, productDelivery.calculateHandlingAmount());
+	}
+
+	@Test
 	public void testOrdersEmpty() throws MissingOrdersException {
 		this.productDelivery.orders = new Vector<Order>();
 		assertThrows(MissingOrdersException.class, () -> {
