@@ -1,24 +1,35 @@
 package es.upm.grise.profundizacion.td3;
 
+import java.sql.*;
 import java.util.Vector;
-import java.sql.Statement;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
 
 public class ProductDelivery {
-	
+
+	// Clase que se puede usar para mockear getConnection
+	public static class mockClass {
+		public Connection getConnection(String url) throws DatabaseProblemException {
+            try {
+                return DriverManager.getConnection(url);
+            } catch (SQLException e) {
+                throw new DatabaseProblemException();
+            }
+        }
+	}
+
 	private Vector<Order> orders = new Vector<Order>();
-	
-	public ProductDelivery() throws DatabaseProblemException {
+	private mockClass mockClass;
+
+
+	// Añadimos una dependencia para poder mockear getConnections
+	public ProductDelivery(mockClass mockClass) throws DatabaseProblemException {
+		this.mockClass = mockClass;
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = mockClass.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -83,5 +94,8 @@ public class ProductDelivery {
 		
 	}
 
-	
+
+
+
 }
+
