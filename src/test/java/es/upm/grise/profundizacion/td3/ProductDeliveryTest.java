@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
-import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -42,5 +41,6 @@ public class ProductDeliveryTest {
             assertThrows(DatabaseProblemException.class, () -> new ProductDelivery());
         }
     }
+
 
 }
