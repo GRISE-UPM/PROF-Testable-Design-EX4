@@ -21,7 +21,11 @@ public class ProductDelivery {
 			throw new DatabaseProblemException();
 		}
 	}
-
+	public int getHour(){
+		SimpleDateFormat sdf = new SimpleDateFormat("HH");	//6
+		Timestamp timestap = new Timestamp(System.currentTimeMillis());//6
+		return Integer.valueOf(sdf.format(timestap));//6
+	}
 	// Calculate the handling amount
 	public double calculateHandlingAmount() throws MissingOrdersException {
 		//1
@@ -39,9 +43,7 @@ public class ProductDelivery {
 		
 		// However, it increases depending on the time of the day
 		// We need to know the hour of the day. Minutes and seconds are not relevant
-		SimpleDateFormat sdf = new SimpleDateFormat("HH");	//6
-		Timestamp timestap = new Timestamp(System.currentTimeMillis());//6
-		int hour = Integer.valueOf(sdf.format(timestap));//6
+		int hour = getHour();//6
 
 		// and it also depends on the number of orders
 		int numberOrders = orders.size();//6
