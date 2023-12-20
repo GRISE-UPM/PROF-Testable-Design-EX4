@@ -16,9 +16,11 @@ public class ProductDelivery {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
+			System.setProperty("database.location", "jdbc:sqlite:resources/orders.db");
+			String database_location = System.getenv("database.location");
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = DriverManager.getConnection(database_location);
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -30,7 +32,7 @@ public class ProductDelivery {
 				
 				int id = resultSet.getInt("id");
 				double amount = resultSet.getDouble("amount");
-				orders.add(new Order(id, amount));
+				this.orders.add(new Order(id, amount));
 				
 			}
 
