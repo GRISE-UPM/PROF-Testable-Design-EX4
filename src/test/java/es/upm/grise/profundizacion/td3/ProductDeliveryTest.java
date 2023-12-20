@@ -52,23 +52,7 @@ public class ProductDeliveryTest {
 
 	@Test
 	public void testSecondPath() throws MissingOrdersException {
-		// Se pasa por 6a, y se sale, es decir, que hour < 22
-		try {
-			productDelivery = new ProductDelivery();
-		} catch (DatabaseProblemException e) {
-			fail("Unexpected DatabaseProblemException");
-		}
-
-		ProductDelivery spyDelivery = spy(productDelivery);
-
-		doReturn(10).when(spyDelivery).getHour(any(),any());
-		doReturn(15).when(spyDelivery).getOrders(spyDelivery.orders);
-		assertEquals(30, spyDelivery.calculateHandlingAmount());
-	}
-
-	@Test
-	public void testThirdPath() throws MissingOrdersException {
-		// Se pasa por 6b, y se sale, es decir, que haya 10 o menos orders
+		// Se pasa por 6a y va a 7, es decir, que haya 10 o menos orders
 		try {
 			productDelivery = new ProductDelivery();
 		} catch (DatabaseProblemException e) {
@@ -79,6 +63,38 @@ public class ProductDeliveryTest {
 
 		doReturn(22).when(spyDelivery).getHour(any(),any());
 		doReturn(9).when(spyDelivery).getOrders(spyDelivery.orders);
+		assertEquals(30, spyDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testThirdPath() throws MissingOrdersException {
+		// Se pasa por 6a y 6b, y se sale, es decir, que hour < 22 y orders <= 10
+		try {
+			productDelivery = new ProductDelivery();
+		} catch (DatabaseProblemException e) {
+			fail("Unexpected DatabaseProblemException");
+		}
+
+		ProductDelivery spyDelivery = spy(productDelivery);
+
+		doReturn(10).when(spyDelivery).getHour(any(),any());
+		doReturn(9).when(spyDelivery).getOrders(spyDelivery.orders);
+		assertEquals(20, spyDelivery.calculateHandlingAmount());
+	}
+
+	@Test
+	public void testFourthPath() throws MissingOrdersException {
+		// Se pasa por nodo 7 tras 6b, y se acaba, o sea, hay < 22 hours y > 10 orders
+		try {
+			productDelivery = new ProductDelivery();
+		} catch (DatabaseProblemException e) {
+			fail("Unexpected DatabaseProblemException");
+		}
+
+		ProductDelivery spyDelivery = spy(productDelivery);
+
+		doReturn(10).when(spyDelivery).getHour(any(),any());
+		doReturn(15).when(spyDelivery).getOrders(spyDelivery.orders);
 		assertEquals(30, spyDelivery.calculateHandlingAmount());
 	}
 	
