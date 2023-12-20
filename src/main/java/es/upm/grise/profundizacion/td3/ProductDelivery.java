@@ -8,17 +8,17 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 
-public class ProductDelivery {
+public class ProductDelivery  {
 	
 	private Vector<Order> orders = new Vector<Order>();
 	
-	public ProductDelivery() throws DatabaseProblemException {
+	public ProductDelivery(DriverManager driverManager) throws DatabaseProblemException {
 		
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = driverManager.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -43,6 +43,9 @@ public class ProductDelivery {
 			
 		}
 
+	}
+
+	public ProductDelivery() {
 	}
 
 	// Calculate the handling amount
@@ -80,6 +83,7 @@ public class ProductDelivery {
 		return totalAmount * handlingPercentage;// nodo 10
 		
 	}
+
 
 	
 }
