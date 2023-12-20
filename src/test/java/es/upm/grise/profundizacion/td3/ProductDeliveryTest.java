@@ -32,6 +32,12 @@ public class ProductDeliveryTest {
 	public void testCalculateHandlingAmount_shouldThrownMissingOrdersException() {
 		productDelivery.orders = new Vector<Order>();
 		assertThrows(MissingOrdersException.class, () -> productDelivery.calculateHandlingAmount());
-}
+	}
 
+	@Test
+	public void testCalculateHandlingAmount_correct() throws Exception {
+		productDelivery.orders.add(new Order(1, 20));
+		productDelivery.orders.add(new Order(2, 20));
+		assertEquals(20.8, productDelivery.calculateHandlingAmount());}
+	
 }
