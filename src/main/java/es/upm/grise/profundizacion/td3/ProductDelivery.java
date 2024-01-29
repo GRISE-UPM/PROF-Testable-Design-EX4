@@ -7,19 +7,32 @@ import java.text.SimpleDateFormat;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ProductDelivery {
+
+	//clase para probar que la conexión falle
+	public static class dummyConnectionClass {
+		public Connection getConnection(String url) throws DatabaseProblemException {
+            try {
+                return DriverManager.getConnection(url);
+            } catch (SQLException e) {
+                throw new DatabaseProblemException();
+            }
+        }
+	}
 	
 	Vector<Order> orders = new Vector<Order>();
-	
-	//public ProductDelivery(DatabaseAccessImpl dbAccess) throws DatabaseProblemException {
-	public ProductDelivery() throws DatabaseProblemException {
 
+	private dummyConnectionClass dummyConnection;
+	
+	public ProductDelivery(dummyConnectionClass dummyConnection) throws DatabaseProblemException {
+		this.dummyConnection = dummyConnection;
 		// Orders are loaded into the orders vector for processing
 		try {
 			
 			// Create DB connection
-			Connection connection = DriverManager.getConnection("jdbc:sqlite:resources/orders.db");
+			Connection connection = dummyConnection.getConnection("jdbc:sqlite:resources/orders.db");
 
 			// Read from the orders table
 			String query = "SELECT * FROM orders";
@@ -67,10 +80,10 @@ public class ProductDelivery {
 		// We need to know the hour of the day. Minutes and seconds are not relevant
 		SimpleDateFormat sdf = new SimpleDateFormat("HH");	
 		Timestamp timestap = new Timestamp(System.currentTimeMillis());
-		int hour = Integer.valueOf(sdf.format(timestap));
+		int hour = getHour(sdf, timestap);
 			
 		// and it also depends on the number of orders
-		int numberOrders = orders.size();
+		int numberOrders = getOrders(orders);
 		
 		// When it is late and the number of orders is large
 		// the handling costs more
@@ -83,5 +96,12 @@ public class ProductDelivery {
 		
 	}
 
+	public int getOrders(Vector<Order> orders){
+		return orders.size();
+	}
+
+	public int getHour(SimpleDateFormat sdf ,Timestamp timestap) {
+        return Integer.valueOf(sdf.format(timestap));
+    }
 	
 }
